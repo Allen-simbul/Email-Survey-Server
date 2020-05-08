@@ -1,13 +1,13 @@
 const express = require('express');
+require('./db/mongoose');
 require('./services/passport');
 const authRoutes = require('./routes/authRoutes');
-
-console.log(process.env);
 
 // express application
 const app = express();
 
-authRoutes(app);
+app.use(express.json());
+app.use(authRoutes);
 
 // Dynamically changed PORT number
 const PORT = process.env.PORT || 5000;
