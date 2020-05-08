@@ -1,16 +1,16 @@
 const express = require('express');
 require('./db/mongoose');
-require('./services/passport');
+require('./services/googleStratOptions');
 
 // routes
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routers/User-Router');
+const googleAuthRoutes = require('./routes/GoogleAuth-Routes');
+const userRoutes = require('./routes/User-Router');
 
 // express application
 const app = express();
 
 app.use(express.json());
-app.use(authRoutes);
+app.use(googleAuthRoutes);
 app.use(userRoutes);
 
 // Dynamically changed PORT number
