@@ -13,17 +13,15 @@ dotenv.config();
 const verifyCallback = async (accessToken, refreshToken, profile, done) => {
   const existingUser = await User.findOne({ googleId: profile.id });
   if (existingUser) {
-    done(null, existingUser);
-  } else {
-    const user = new User({
-      googleId: profile.id,
-      firstName: profile.name.givenName,
-      lastName: profile.name.familyName,
-    });
-    await user.save().then((user) => {
-      done(null, user);
-    });
+    return done(null, existingUser);
   }
+
+  const user = await new User({
+    googleId: profile.id,
+    firstName: profile.name.givenName,
+    lastName: profile.name.familyName,
+  }).save();
+  done(null, user);
 };
 
 passport.serializeUser((user, done) => {
@@ -31,9 +29,8 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  await User.findById(id).then((user) => {
-    done(null, user);
-  });
+  const user = await User.findById(id, '_id firstName lastName');
+  done(null, user);
 });
 
 passport.use(new GoogleStrategy(googleStrategyOptions, verifyCallback));
@@ -45,7 +42,13 @@ router.get(
   })
 );
 
-router.get('/auth/google/callback', passport.authenticate('google'));
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google'),
+  (req, res) => {
+    res.redirect('/surveys');
+  }
+);
 
 router.get('/api/current_user', (req, res) => {
   res.send(req.user);
@@ -53,7 +56,7 @@ router.get('/api/current_user', (req, res) => {
 
 router.get('/api/logout', (req, res) => {
   req.logout();
-  res.send('You are logged out');
+  res.redirect('/');
 });
 
 module.exports = router;
