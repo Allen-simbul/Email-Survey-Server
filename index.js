@@ -8,6 +8,7 @@ dotenv.config();
 
 // routes
 const googleAuthRoutes = require('./routes/GoogleAuth-Routes');
+const billingRoutes = require('./routes/Billing-Routes');
 const userRoutes = require('./routes/User-Router');
 
 // express application
@@ -22,6 +23,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(googleAuthRoutes);
+app.use(billingRoutes);
 app.use(userRoutes);
 
 // Dynamically changed PORT number

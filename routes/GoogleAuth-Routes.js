@@ -29,7 +29,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const user = await User.findById(id, '_id firstName lastName');
+  const user = await User.findById(id, '_id credits firstName lastName');
   done(null, user);
 });
 

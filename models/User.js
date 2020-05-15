@@ -18,6 +18,10 @@ const userSchema = new Schema({
     required: true,
     trim: true,
   },
+  credits: {
+    type: Number,
+    default: 0,
+  },
 });
 
 mongoose.model('Users', userSchema);
