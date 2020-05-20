@@ -6,7 +6,7 @@ const creditCheck = async (req, res, next) => {
     }
     next();
   } catch (e) {
-    return res.status(401).send({ error: 'Not Enough credits!' });
+    return res.status(403).send({ error: 'Not Enough credits!' });
   }
 };
 
